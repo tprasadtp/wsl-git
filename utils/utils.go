@@ -31,13 +31,13 @@ func Win2Wsl(path string) (string, error) {
 	*/
 	wslpathreturn, err := exec.Command("wsl", "wslpath", "-u", path).Output()
 	if err != nil {
-		fmt.Printf("Some error occured while converting path to wsl: %v\n", err)
+		fmt.Printf("Some error occurre while converting path to wsl: %v\n", err)
 		os.Exit(2)
 	}
 	return string(wslpathreturn), err
 }
 
-//PrintError ... Prints error messagea nd exists with error code passed.
+//PrintError ... Prints error message and exists with error code passed.
 func PrintError(msg string, exitcode int) {
 	//fmt.Println(colorstring.Color("[red]" + err.Error()))
 	fmt.Printf(msg)

@@ -17,6 +17,7 @@ build_script:
 after_build:
 - ps: >-
     dir $env:APPVEYOR_BUILD_FOLDER\Artifacts\*.exe | Get-FileHash -Algorithm sha1 | Format-Table > $env:APPVEYOR_BUILD_FOLDER\Artifacts\SHA1SUM.txt
+
     dir $env:APPVEYOR_BUILD_FOLDER\artifacts\*.exe | Get-FileHash -Algorithm sha256 | Format-Table > $env:APPVEYOR_BUILD_FOLDER\Artifacts\SHA256SUM.txt
 
 test: off
@@ -36,8 +37,8 @@ deploy:
        ---\n
        * Built for $(APPVEYOR_REPO_COMMIT)\n
        * For Windows 10 64 Bit Only.\n
-       * For GPG Signing & SSH use Windows Binaries [See This](https://github.com/tprasadtp/wsl-git#signing-with-gpg4win)
-       * For SSH  [See This](https://github.com/tprasadtp/wsl-git#ssh-with-windows-ssh-client)
+       * For GPG Signing & SSH use Windows Binaries [See This](https://github.com/tprasadtp/wsl-git#signing-with-gpg4win)\n
+       * For SSH  [See This](https://github.com/tprasadtp/wsl-git#ssh-with-windows-ssh-client)\n\n
        ```\n
        Built with Commit        : $(APPVEYOR_REPO_COMMIT)\n
        Build Version            : $(APPVEYOR_BUILD_VERSION)\n
