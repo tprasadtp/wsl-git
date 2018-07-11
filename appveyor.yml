@@ -1,0 +1,61 @@
+version: 0.1.{build}
+skip_tags: true
+image: Visual Studio 2017
+clone_folder: C:\Projects
+environment:
+  GOOS: windows
+
+install:
+- ps: go get -d github.com/tprasadtp/wsl-git
+
+before_build:
+- ps: New-Item -ItemType directory -Path .\Artifacts
+
+build_script:
+- ps: go build -o .\Artifacts\wsl-git.exe
+
+after_build:
+- ps: >-
+    dir $env:APPVEYOR_BUILD_FOLDER\Artifacts\*.exe | Get-FileHash -Algorithm sha1 | Format-Table > $env:APPVEYOR_BUILD_FOLDER\Artifacts\SHA1SUM.txt
+    dir $env:APPVEYOR_BUILD_FOLDER\artifacts\*.exe | Get-FileHash -Algorithm sha256 | Format-Table > $env:APPVEYOR_BUILD_FOLDER\Artifacts\SHA256SUM.txt
+
+test: off
+
+artifacts:
+- path: Artifacts\*.exe
+  name: Github Releases
+- path: Artifacts\*.txt
+  name: Github Releases
+
+deploy:
+- provider: GitHub
+  tag: $(APPVEYOR_BUILD_VERSION)
+  release: wsl-git Release - $(APPVEYOR_BUILD_VERSION)
+  description: >-
+       Automated Build & Release\n
+       ---\n
+       * Built for $(APPVEYOR_REPO_COMMIT)\n
+       * For Windows 10 64 Bit Only.\n
+       * For GPG Signing & SSH use Windows Binaries [See This](https://github.com/tprasadtp/wsl-git#signing-with-gpg4win)
+       * For SSH  [See This](https://github.com/tprasadtp/wsl-git#ssh-with-windows-ssh-client)
+       ```\n
+       Built with Commit        : $(APPVEYOR_REPO_COMMIT)\n
+       Build Version            : $(APPVEYOR_BUILD_VERSION)\n
+       Commit Message           : $(APPVEYOR_REPO_COMMIT_MESSAGE)\n
+       Committed on             : $(APPVEYOR_REPO_COMMIT_TIMESTAMP)\n
+       Built on Worker Image    : $(APPVEYOR_BUILD_WORKER_IMAGE)\n
+       ```\n
+  auth_token:
+    secure: RsXR4gluSnjX2LJ2wudRQZ4NCVnndED3+V+28EMouoWov7ytdzIycF0mSjE8U18v
+  prerelease: true
+  force_update: true
+notifications:
+  - provider: Slack
+    incoming_webhook:
+      secure:
+    on_build_success: false
+    on_build_failure: true
+    on_build_status_changed: true
+  - provider: GitHubPullRequest
+    auth_token:
+      secure:
