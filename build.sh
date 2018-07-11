@@ -4,4 +4,4 @@
 $now = Get-Date -UFormat "%Y-%m-%d_%T"
 $sha1 = (git rev-parse HEAD).Trim()
 
-env GOOS=windows GOARCH=amd64 go build -ldflags "-X version.COMMIT=$sha1" -o ./wsl-git.exe
+env GOOS=windows GOARCH=amd64 go build -ldflags  -o ./wsl-git.exe

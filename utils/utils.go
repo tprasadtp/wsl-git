@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"github.com/tprasadtp/wsl-git/version"
 	"os"
 	"os/exec"
 )
@@ -45,12 +46,15 @@ func PrintError(msg string, exitcode int) {
 
 //Usage ... Help Text
 func Usage() {
+	fmt.Printf("WSL-GIT - A Bridge between git installed in WSL and Windows\n")
+	fmt.Printf("----------------\n\n")
+	fmt.Printf("Version - %s\n", version.VERSION)
 	fmt.Printf("Usage:")
-	fmt.Printf("wgit <your git commands>\n")
-	fmt.Printf("----------------\n")
-	fmt.Printf("--wsl-git-version   	Display Version info.\n")
-	fmt.Printf("--wsl-git-help     		Display this message.\n")
+	fmt.Printf("wsl-git <your git commands>\n")
+	fmt.Printf("----------------\n\n")
+	fmt.Printf("--wsl-git-version     Display Version info.\n")
+	fmt.Printf("--wsl-git-help        Display this message.\n")
 	fmt.Printf("--wsl-git-print-args  Display all the argumets passed to the program.\n")
 	fmt.Printf("Remember if no arguments are passed, it will display git's help, as git would do.\n")
-	fmt.Printf("----------------\n")
+	fmt.Printf("----------------\n\n")
 }

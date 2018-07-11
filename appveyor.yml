@@ -1,4 +1,4 @@
-version: 0.1.{build}
+version: 0.1.0.build-{build}
 skip_tags: true
 image: Visual Studio 2017
 clone_folder: C:\Projects
@@ -46,16 +46,12 @@ deploy:
        Built on Worker Image    : $(APPVEYOR_BUILD_WORKER_IMAGE)\n
        ```\n
   auth_token:
-    secure: RsXR4gluSnjX2LJ2wudRQZ4NCVnndED3+V+28EMouoWov7ytdzIycF0mSjE8U18v
+    secure: RLsevc7xXRdwl1UWy8CvwbDvNi/aqlhZjJ+oGFIsS6IQfv5+QvN5f+kA4cHTUIjU
   prerelease: true
   force_update: true
 notifications:
-  - provider: Slack
-    incoming_webhook:
-      secure:
-    on_build_success: false
-    on_build_failure: true
-    on_build_status_changed: true
   - provider: GitHubPullRequest
     auth_token:
-      secure:
+     secure: RLsevc7xXRdwl1UWy8CvwbDvNi/aqlhZjJ+oGFIsS6IQfv5+QvN5f+kA4cHTUIjU
+    on_build_failure: true
+    on_build_status_changed: true

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"runtime"
@@ -22,14 +21,14 @@ func main() {
 	//Get all the arguments
 	arguments = append(os.Args[1:])
 
-	// Edge case no arguments
+	// Edge case: no arguments
 	if len(arguments) < 1 {
 		arguments = append([]string{"help"}, arguments...)
 	}
 
 	//
 	if strings.ToLower(arguments[0]) == "--wsl-git-version" {
-		fmt.Printf("WSL-GIT Version : %10s\nBuild from Git Commit : %10X", version.VERSION, version.COMMIT)
+		fmt.Printf("\nWSL-GIT Version - %s\n\n", version.VERSION)
 		return
 	}
 	// help
@@ -52,8 +51,7 @@ func main() {
 	// loop over arguments to check any have :\\ or :\ or \
 	// If So, they are paths. convert them to WSL Path
 
-	// Only do it if arguments are greater than or equal to 2
-	// Because first element is "git"
+	// Only do it if arguments are greater than or equal to 1
 	if len(arguments) >= 1 {
 		for index, arg := range arguments {
 			if strings.Contains(arg, "\\") {
@@ -73,7 +71,7 @@ func main() {
 	}
 
 	var stdoutBuf, stderrBuf bytes.Buffer
-	// prepend git to all commands
+	//Pprepend git to arguments
 	arguments = append([]string{"git"}, arguments...)
 	cmd := exec.Command("wsl", arguments...)
 
@@ -85,7 +83,8 @@ func main() {
 	stderr := io.MultiWriter(os.Stderr, &stderrBuf)
 	err := cmd.Start()
 	if err != nil {
-		log.Fatalf("cmd.Start() failed with '%s'\n", err)
+		fmt.Printf("cmd.Start() failed with '%s'\n", err)
+		os.Exit(9)
 	}
 
 	go func() {
@@ -98,13 +97,15 @@ func main() {
 
 	err = cmd.Wait()
 	if err != nil {
-		log.Fatalf("cmd.Run() failed with %s\n", err)
+		fmt.Printf("cmd.Run() failed with %s\n", err)
+		os.Exit(9)
 	}
 	if errStdout != nil || errStderr != nil {
-		log.Fatal("failed to capture stdout or stderr\n")
+		utils.PrintError("Failed to capture stdout or stderr\n", 10)
 	}
 	//outStr, errStr := string(stdoutBuf.Bytes()), string(stderrBuf.Bytes())
 	// Display Output
 	//fmt.Printf("\nOutput:\n%s\n", outStr)
+	//fmt.Printf("\nErrors:\n%s\n", errStr)
 	//
 }

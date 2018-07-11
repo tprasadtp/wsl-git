@@ -11,7 +11,7 @@ What if you could make VS code make use of git already installed in WSL? Meet **
 - Windows Subsytem for Linux is enabled and Git is installed in it.
 
 ## Build & Release
-[![Build status](https://ci.appveyor.com/api/projects/status/0vtcsyno27bjxe9i?svg=true)](https://ci.appveyor.com/project/tprasadtp/npiperelay)
+[![Build status](https://ci.appveyor.com/api/projects/status/wrmmano1tc21fmcb?svg=true)](https://ci.appveyor.com/project/tprasadtp/wsl-git)
 [![GitHub release](https://img.shields.io/github/release/tprasadtp/wsl-git.svg)](https://github.com/tprasadtp/wsl-git/releases)
 [![license](https://img.shields.io/github/license/tprasadtp/wsl-git.svg)](https://github.com/tprasadtp/wsl-git/releases/LICENSE)
 [![Go Report](https://goreportcard.com/badge/github.com/tprasadtp/wsl-git)](https://goreportcard.com/report/github.com/tprasadtp/wsl-git)
@@ -38,12 +38,13 @@ What if you could make VS code make use of git already installed in WSL? Meet **
 
 ## What's Broken
 - Some stuff might break (piping o/p, using bash shell features like xargs etc), but you should be using WSL for them anyways.
+- Output colors are gone.
 - SSH requires you to setup SSH keys in WSL and not windows. [See Workaround for using Gpg4Win or using Windows SSH client]
 - GPG signing requires you to steup keys on WSL and not on Windows. [See Workaround for Gpg4Win below]
 - bash escaping is done ony for few cases and not for all chars and edge cases.
 - Git credential manager for windows/gnome keyring for storing credentials
 - Exit codes are not preserved.
-- pre-commit, post commit and other git hooks might not work
+- pre-commit, post commit and other git hooks might not work.
 
 ## Signing With GPG4Win
 
@@ -72,4 +73,4 @@ Do note however that bash does not like carriage returns and this has not been t
 You can use this [https://github.com/tprasadtp/pipe-ssh-pageant/releases](https://github.com/tprasadtp/pipe-ssh-pageant/releases) and set your `GIT_SSH_COMMAND` to ssh.exe from windows
 
 ## BIG FAT WARNING
-**DO NOT USE GIT IN SCRIPTS WHILE USING THIS!!**
+**DO NOT USE THIS IN SCRIPTS!!**
