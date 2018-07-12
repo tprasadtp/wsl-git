@@ -10,11 +10,9 @@ import (
 //CheckwslExists ... Check if wsl.exe is present
 func CheckwslExists() {
 	path, err := exec.LookPath("wsl")
-	if err != nil {
+	if err != nil || len(path) == 0 {
 		fmt.Printf("Didn't find 'wsl' executable.\nMake Sure you have WSL enabled and a distro installed?\n")
-		os.Exit(7)
-	} else {
-		fmt.Printf("'wsl' executable is in '%s'\n", path)
+		os.Exit(2)
 	}
 }
 
@@ -32,9 +30,20 @@ func Win2Wsl(path string) (string, error) {
 	wslpathreturn, err := exec.Command("wsl", "wslpath", "-u", path).Output()
 	if err != nil {
 		fmt.Printf("Some error occurre while converting path to wsl: %v\n", err)
-		os.Exit(2)
+		os.Exit(10)
 	}
 	return string(wslpathreturn), err
+}
+
+//Wsl2Win ... Convert path to wsl path
+func Wsl2Win(path string) (string, error) {
+	var winpath []byte
+	winpath, err := exec.Command("wsl", "wslpath", "-a", "-w", path).Output()
+	if err != nil {
+		fmt.Printf("Some error occurred while converting path to Windows: %v\n", err)
+		os.Exit(10)
+	}
+	return string(winpath), err
 }
 
 //PrintError ... Prints error message and exists with error code passed.
@@ -54,7 +63,8 @@ func Usage() {
 	fmt.Printf("----------------\n\n")
 	fmt.Printf("--wsl-git-version     Display Version info.\n")
 	fmt.Printf("--wsl-git-help        Display this message.\n")
-	fmt.Printf("--wsl-git-print-args  Display all the argumets passed to the program.\n")
+	//	fmt.Printf("--wsl-git-print-args  Display all the argumets passed to the program.\n")
 	fmt.Printf("Remember if no arguments are passed, it will display git's help, as git would do.\n")
 	fmt.Printf("----------------\n\n")
+	return
 }

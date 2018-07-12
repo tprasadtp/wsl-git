@@ -18,33 +18,62 @@ func main() {
 		arguments []string
 	)
 
+	//Check if not on windows
+	if runtime.GOOS != "windows" {
+		utils.PrintError("Not running on Windows.\n", 1)
+	}
+
 	//Get all the arguments
 	arguments = append(os.Args[1:])
 
-	// Edge case: no arguments
+	// Edge case: no arguments, append help to args
 	if len(arguments) < 1 {
 		arguments = append([]string{"help"}, arguments...)
 	}
 
-	//
+	//Version Info
 	if strings.ToLower(arguments[0]) == "--wsl-git-version" {
 		fmt.Printf("\nWSL-GIT Version - %s\n\n", version.VERSION)
 		return
 	}
-	// help
+	// Help
 	if strings.ToLower(arguments[0]) == "--wsl-git-help" {
 		utils.Usage()
 		return
 	}
 
-	if strings.ToLower(arguments[0]) == "--wsl-git-print-args" {
-		fmt.Printf("Arguments passed to %s are\n%v", os.Args[0], arguments)
-		return
-	}
+	// Check if wsl is present, if not Exit
+	utils.CheckwslExists()
 
-	//check if not on windows
-	if runtime.GOOS != "windows" {
-		utils.PrintError("Not running on Windows.\n", 1)
+	//if strings.ToLower(arguments[0]) == "--wsl-git-print-args" {
+	//	fmt.Printf("Arguments passed to %s are\n%v", os.Args[0], arguments)
+	//		return
+	//	}
+
+	// VS Code hack
+	// VS code runs git rev-parse --show-toplevel
+	// every time to determine if dir is git repo
+	// We need to convert wsl path retrned to windows path
+	// A Proper impelmentation would be to inspect stdout and stderr and convert them on fly
+	// However this becomes slow for lengthy o/p Muti-threaded perhaps?
+	// TODO for V 1.0
+
+	if arguments[0] == "rev-parse" && arguments[1] == "--show-toplevel" {
+		toplevelcmd := exec.Command("wsl", "git", "rev-parse", "--show-toplevel")
+		out, err := toplevelcmd.CombinedOutput()
+		if err != nil {
+			fmt.Printf("toplevelcmd.Run() failed with %s\n", err)
+			utils.PrintError("Cannot continue\n", 11)
+		}
+
+		windowspath, err := utils.Wsl2Win(string(out))
+		if err != nil {
+			fmt.Printf(err.Error())
+			utils.PrintError("Something went wront while converting path to windows format.\n", 12)
+		} else {
+			fmt.Print(windowspath)
+			return
+		}
 	}
 
 	// This is just a hack which should work most of the times
@@ -56,18 +85,18 @@ func main() {
 		for index, arg := range arguments {
 			if strings.Contains(arg, "\\") {
 
-				// convert path to wsl
+				// Convert path to wsl
 				wslpath, err := utils.Win2Wsl(arg)
 				if err != nil {
 					fmt.Printf(err.Error())
-					utils.PrintError("Something went wront while getting path is wsl format.\n", 6)
+					utils.PrintError("Something went wront while getting path is wsl format.\n", 11)
 				}
 				// Assign wsl path to argument element
 				arguments[index] = wslpath
 			}
 		}
 	} else {
-		utils.PrintError("Invalid Nummer of arguments.\n", 8)
+		utils.PrintError("Invalid Nummer of arguments.\n", 15)
 	}
 
 	var stdoutBuf, stderrBuf bytes.Buffer
@@ -84,7 +113,7 @@ func main() {
 	err := cmd.Start()
 	if err != nil {
 		fmt.Printf("cmd.Start() failed with '%s'\n", err)
-		os.Exit(9)
+		os.Exit(11)
 	}
 
 	go func() {
@@ -98,7 +127,7 @@ func main() {
 	err = cmd.Wait()
 	if err != nil {
 		fmt.Printf("cmd.Run() failed with %s\n", err)
-		os.Exit(9)
+		os.Exit(11)
 	}
 	if errStdout != nil || errStderr != nil {
 		utils.PrintError("Failed to capture stdout or stderr\n", 10)
