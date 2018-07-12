@@ -2,7 +2,7 @@
 
 | Exit Codes | Reason |
 |:----------:|:-------|
-[ 1-10] Platform Incompatibility |
+| 1-9| Platform Incompatibility |
 |  1 | Not Running on Windows |
 |  2 | wsl binary not found |
 | 10-20| Runtime Errors |
