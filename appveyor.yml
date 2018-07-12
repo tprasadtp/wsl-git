@@ -1,9 +1,10 @@
-version: 0.1.0.build-{build}
+version: 0.1.1.build-{build}
 skip_tags: true
 image: Visual Studio 2017
-clone_folder: C:\Projects
+clone_folder: c:\gopath\src\github.com\tprasadtp\wsl-git
 environment:
   GOOS: windows
+  GOARCH: amd64
 
 install:
 - ps: go get -d github.com/tprasadtp/wsl-git
@@ -38,7 +39,7 @@ deploy:
        * Built for $(APPVEYOR_REPO_COMMIT)\n
        * For Windows 10 64 Bit Only.\n
        * For GPG Signing & SSH use Windows Binaries [See This](https://github.com/tprasadtp/wsl-git#signing-with-gpg4win)\n
-       * For SSH  [See This](https://github.com/tprasadtp/wsl-git#ssh-with-windows-ssh-client)\n\n
+       * For SSH  [See This](https://github.com/tprasadtp/wsl-git#ssh-with-windows-ssh-client)\n
        ```\n
        Built with Commit        : $(APPVEYOR_REPO_COMMIT)\n
        Build Version            : $(APPVEYOR_BUILD_VERSION)\n
@@ -47,12 +48,14 @@ deploy:
        Built on Worker Image    : $(APPVEYOR_BUILD_WORKER_IMAGE)\n
        ```\n
   auth_token:
-    secure: RLsevc7xXRdwl1UWy8CvwbDvNi/aqlhZjJ+oGFIsS6IQfv5+QvN5f+kA4cHTUIjU
+    secure: eiA+Ys0gckN5blKV6+SAU1MQNSP9yu0ByOTEAxDNJL5Jd7waC3qyKWKpxq4Mbhbk
   prerelease: true
   force_update: true
+  on:
+    branch: master
 notifications:
   - provider: GitHubPullRequest
     auth_token:
-     secure: RLsevc7xXRdwl1UWy8CvwbDvNi/aqlhZjJ+oGFIsS6IQfv5+QvN5f+kA4cHTUIjU
+     secure: eiA+Ys0gckN5blKV6+SAU1MQNSP9yu0ByOTEAxDNJL5Jd7waC3qyKWKpxq4Mbhbk
     on_build_failure: true
     on_build_status_changed: true

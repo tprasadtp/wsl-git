@@ -29,7 +29,7 @@ func Win2Wsl(path string) (string, error) {
 	*/
 	wslpathreturn, err := exec.Command("wsl", "wslpath", "-u", path).Output()
 	if err != nil {
-		fmt.Printf("Some error occurre while converting path to wsl: %v\n", err)
+		fmt.Printf("Some error occurred while converting path to wsl: %v\n", err)
 		os.Exit(10)
 	}
 	return string(wslpathreturn), err

@@ -1,14 +1,14 @@
 # wsl-git - Use your git binaries from WSL on Windows
-I hate installing same programs which do the same thing twice on my machine. WSL is awesome and I do most of my dev stuff from there. So, obviously, I have git installed in WSL. But When I open  VS Code Something like below pops up.
-![VS-codeImage](images/vs-git-not-found.png)
-
-What if you could make VS code make use of git already installed in WSL? Meet **wsl-git**.
+I hate installing same programs which do the same thing twice on my machine. WSL is awesome and I do most of my dev stuff from there. So, obviously, I have git installed in WSL. Wouldn't it be better if you could use git in windows as well? Meet **wsl-git**.
 - Its a static binary written in Go, which translates git commands from windows to wsl.
 - It uses `wsl` command and `wslpath` which is available since RS4 (1803) build of Windows 10.
 
 ## Requirements
 - Windows 10 64 Bit Build 17134 and above. [RS4 aka Windows 10 1803 Update]
 - Windows Subsytem for Linux is enabled and Git is installed in it.
+
+## Note if you have multiple distros installed
+This will ONLY work on default distro. You can use `wslconfig` to change your default distro. You can read about it [here](https://blogs.msdn.microsoft.com/commandline/2017/11/28/a-guide-to-invoking-wsl/).
 
 ## Build & Release
 [![Build status](https://ci.appveyor.com/api/projects/status/wrmmano1tc21fmcb?svg=true)](https://ci.appveyor.com/project/tprasadtp/wsl-git)
@@ -32,9 +32,7 @@ What if you could make VS code make use of git already installed in WSL? Meet **
     Put `wsl-git.exe` Somewhere in your path and you should be fine.
 
 ## What's not tested
-- Muliple WSL distros
-- A lot of edge cases
-
+- A lot of edge cases with chars/arguments which should be escaped from bash
 
 ## What's Broken
 - Some stuff might break (piping o/p, using bash shell features like xargs etc), but you should be using WSL for them anyways.
@@ -45,6 +43,7 @@ What if you could make VS code make use of git already installed in WSL? Meet **
 - Git credential manager for windows/gnome keyring for storing credentials
 - Exit codes are not preserved.
 - pre-commit, post commit and other git hooks might not work.
+- `wsl-git rev-parse --show-toplevel` returns wsl path and should be converted to windows path
 
 ## Signing With GPG4Win
 
