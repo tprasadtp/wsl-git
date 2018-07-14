@@ -53,7 +53,7 @@ This will ONLY work on default distro. You can use `wslconfig` to change your de
 - Alternatively you can set your gpg.program to gpg.exe from Windows in your `.gitconfig` or `.git/config`.
   ```toml
   [gpg]
-    program = C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe
+    program = /mnt/c/path-to/gpg.exe
   ```
 - For SSH, the above mentioned method seems little buggy for now and hangs many times. So till it is fixed, I recommend using [https://github.com/benpye/wsl-ssh-pageant](https://github.com/benpye/wsl-ssh-pageant), which uses the shiny new AF_SOCKET feature or  [NZSmartie's Go version](https://github.com/NZSmartie/wsl-ssh-pageant).
 
@@ -62,7 +62,7 @@ This will ONLY work on default distro. You can use `wslconfig` to change your de
 - Alternatively you can set your core.sshCommnd to ssh.exe from Windows in your `.gitconfig` or `.git/config`.
   ```toml
   [core]
-    sshCommand = C:\\Windows\\System32\\OpenSSH\\ssh.exe
+    sshCommand = /mnt/c/Windows/system32/OpenSSH/ssh.exe
   ```
 
 Do note however that bash does not like carriage returns and this has not been tested.
@@ -73,3 +73,5 @@ You can use this [https://github.com/tprasadtp/pipe-ssh-pageant/releases](https:
 ## BIG FAT WARNING
 - **DO NOT USE THIS IN SCRIPTS!!**
 - **YOUR GLOBAL GITCONFIG SHOULD BE IN WSL, NOT IN WINDOWS.**
+
+[![Analytics](https://ga-beacon.prasadt.com/UA-101760811-3/github/wsl-git?flat)](https://prasadt.com/google-analytics-beacon)
