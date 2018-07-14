@@ -5,6 +5,7 @@ import (
 	"github.com/tprasadtp/wsl-git/version"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 //CheckwslExists ... Check if wsl.exe is present
@@ -27,7 +28,8 @@ func Win2Wsl(path string) (string, error) {
 		    -w    translate from a WSL path to a Windows path
 				-m    translate from a WSL path to a Windows path, with ‘/’ instead of ‘\\’
 	*/
-	wslpathreturn, err := exec.Command("wsl", "wslpath", "-u", path).Output()
+	wslpathreturn, err := exec.Command("wsl", "wslpath", "-u",
+		strings.Replace(path, string(`\`), `/\`, -1)).Output()
 	if err != nil {
 		fmt.Printf("Some error occurred while converting path to wsl: %v\n", err)
 		os.Exit(10)
