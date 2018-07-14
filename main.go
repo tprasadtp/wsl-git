@@ -124,7 +124,7 @@ func main() {
 
 	err = cmd.Wait()
 	if err != nil {
-		fmt.Printf("cmd.Run() failed with %s\n", err)
+		fmt.Printf("git %s failed with %s\n", os.Args[1], err)
 		os.Exit(11)
 	}
 	if errStdout != nil || errStderr != nil {
