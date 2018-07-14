@@ -18,7 +18,7 @@ func main() {
 		arguments []string
 	)
 
-	//Check if not on windows
+	//Check if not on Windows
 	if runtime.GOOS != "windows" {
 		utils.PrintError("Not running on Windows.\n", 1)
 	}
@@ -52,10 +52,8 @@ func main() {
 
 	// VS Code hack
 	// VS code runs git rev-parse --show-toplevel
-	// every time to determine if dir is git repo
-	// We need to convert wsl path retrned to windows path
-	// A Proper impelmentation would be to inspect stdout and stderr and convert them on fly
-	// However this becomes slow for lengthy o/p Muti-threaded perhaps?
+	// every time to determine if directrory is git repository
+	// We need to convert wsl path returned to windows path
 	// TODO for V 1.0
 
 	if arguments[0] == "rev-parse" && arguments[1] == "--show-toplevel" {
@@ -69,7 +67,7 @@ func main() {
 		windowspath, err := utils.Wsl2Win(string(out))
 		if err != nil {
 			fmt.Printf(err.Error())
-			utils.PrintError("Something went wront while converting path to windows format.\n", 12)
+			utils.PrintError("Something went wont while converting path to windows format.\n", 12)
 		} else {
 			fmt.Print(windowspath)
 			return
@@ -89,18 +87,18 @@ func main() {
 				wslpath, err := utils.Win2Wsl(arg)
 				if err != nil {
 					fmt.Printf(err.Error())
-					utils.PrintError("Something went wront while getting path is wsl format.\n", 11)
+					utils.PrintError("Something went wrong while getting path is wsl format.\n", 11)
 				}
 				// Assign wsl path to argument element
 				arguments[index] = wslpath
 			}
 		}
 	} else {
-		utils.PrintError("Invalid Nummer of arguments.\n", 15)
+		utils.PrintError("Invalid Number of arguments.\n", 15)
 	}
 
 	var stdoutBuf, stderrBuf bytes.Buffer
-	//Pprepend git to arguments
+	//Prepends git to arguments
 	arguments = append([]string{"git"}, arguments...)
 	cmd := exec.Command("wsl", arguments...)
 
